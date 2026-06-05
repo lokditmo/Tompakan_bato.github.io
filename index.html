@@ -1,12 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tompakan</title>
+</head>
+<body style="background:#111;color:white;text-align:center;font-family:Arial;padding-top:100px;">
+
+<h1>Tompakan</h1>
+
+<input id="code" placeholder="Enter your nagan">
+<button onclick="checkCode()">Submit</button>
+
+<div id="result"></div>
+
 <script>
 function checkCode() {
+    const name = document.getElementById("code").value.trim().toLowerCase();
 
-    const input = document.getElementById("code")
-        .value
-        .trim()
-        .toLowerCase();
-
-    const validNames = [
+    const valid = [
         "zuriel",
         "sibon",
         "rheen li",
@@ -17,133 +29,36 @@ function checkCode() {
         "nysun"
     ];
 
-    if (!validNames.includes(input)) {
-        document.getElementById("result").innerHTML =
-            "<h2>❌ Invalid Name</h2>";
+    if (!valid.includes(name)) {
+        document.getElementById("result").innerHTML = "❌ nagan mo ha ot";
         return;
     }
 
     document.body.innerHTML = `
-    <div id="terminal" style="
-        background:black;
-        color:#00ff00;
-        width:100vw;
-        height:100vh;
-        padding:20px;
-        font-family:monospace;
-        font-size:22px;
-        box-sizing:border-box;
-        overflow:hidden;
-    ">
-        <div id="logs"></div>
-
-        <br>
-
-        <div style="
-            width:100%;
-            height:30px;
-            border:2px solid #00ff00;
-        ">
-            <div id="bar" style="
-                width:0%;
-                height:100%;
-                background:#00ff00;
-            "></div>
-        </div>
-
-        <p id="percent">0%</p>
+    <div style="background:black;color:#00ff00;height:100vh;padding:20px;font-family:monospace">
+        <h1>INITIALIZING BREACH...</h1>
     </div>
     `;
 
-    const logs = document.getElementById("logs");
+    setTimeout(() => {
+        document.body.innerHTML = `
+        <div style="background:black;color:#00ff00;height:100vh;padding:20px;font-family:monospace">
+            <h1>ACCESS GRANTED</h1>
+        </div>
+        `;
+    }, 2000);
 
-    const messages = [
-        "[+] INITIALIZING BREACH...",
-        "[+] SCANNING TARGET...",
-        "[+] BYPASSING FIREWALL...",
-        "[+] ACCESSING DATABASE...",
-        "[+] EXTRACTING FILES...",
-        "[+] DECRYPTING PASSWORDS...",
-        "[+] ELEVATING PRIVILEGES...",
-        "[+] INJECTING PAYLOAD...",
-        "[+] ESTABLISHING ROOT ACCESS..."
-    ];
-
-    let msgIndex = 0;
-    let progress = 0;
-
-    const hack = setInterval(() => {
-
-        if (msgIndex < messages.length) {
-            logs.innerHTML += messages[msgIndex] + "<br>";
-            msgIndex++;
-        }
-
-        progress += 4;
-
-        document.getElementById("bar").style.width =
-            progress + "%";
-
-        document.getElementById("percent").innerHTML =
-            progress + "%";
-
-        if (progress >= 100) {
-
-            clearInterval(hack);
-
-            logs.innerHTML +=
-                "<br><span style='font-size:40px'>ACCESS GRANTED</span>";
-
-            setTimeout(() => {
-
-                let flash = 0;
-
-                const flashing = setInterval(() => {
-
-                    document.body.style.background =
-                        flash % 2 ? "#fff" : "#000";
-
-                    flash++;
-
-                    if (flash > 20) {
-
-                        clearInterval(flashing);
-
-                        document.body.innerHTML = `
-                        <div style="
-                            height:100vh;
-                            display:flex;
-                            flex-direction:column;
-                            justify-content:center;
-                            align-items:center;
-                            background:#111;
-                            color:white;
-                            text-align:center;
-                            font-family:Arial;
-                            padding:20px;
-                        ">
-                            <h1 style="font-size:70px">
-                                😂 LOKDIT MO!
-                            </h1>
-
-                            <p style="font-size:32px">
-                                from pinaka poging nyong tropa 😎
-                            </p>
-
-                            <br>
-
-                            <p style="font-size:22px">
-                                Created by Earl
-                            </p>
-                        </div>
-                        `;
-                    }
-
-                }, 150);
-
-            }, 1000);
-        }
-
-    }, 120);
+    setTimeout(() => {
+        document.body.innerHTML = `
+        <div style="background:#111;color:white;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+            <h1>😂 LOKDIT MO!</h1>
+            <p>hahahaha mission success😎</p>
+            <p>Created by Earl</p>
+        </div>
+        `;
+    }, 4000);
 }
 </script>
+
+</body>
+</html>
