@@ -4,19 +4,146 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tompakan</title>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    background:#111;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+}
+
+#matrix{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+}
+
+.container{
+    padding-top:100px;
+}
+
+input{
+    padding:12px;
+    font-size:20px;
+    border-radius:8px;
+    border:none;
+}
+
+button{
+    padding:12px 20px;
+    font-size:20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+#result{
+    margin-top:20px;
+}
+</style>
 </head>
-<body style="background:#111;color:white;text-align:center;font-family:Arial;padding-top:100px;">
 
-<h1>Tompakan</h1>
+<body>
 
-<input id="code" placeholder="Enter your nagan ba">
-<button onclick="checkCode()">Submit</button>
+<canvas id="matrix"></canvas>
 
-<div id="result"></div>
+<div class="container">
+    <h1>Tompakan</h1>
+
+    <input id="code" placeholder="Enter your nagan ba">
+
+    <button onclick="checkCode()">
+        Submit
+    </button>
+
+    <div id="result"></div>
+</div>
 
 <script>
-function checkCode() {
-    const name = document.getElementById("code").value.trim().toLowerCase();
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const fontSize = 16;
+const columns = Math.floor(canvas.width / fontSize);
+
+const drops = [];
+
+for(let i=0;i<columns;i++){
+    drops[i]=1;
+}
+
+function drawMatrix(){
+
+    ctx.fillStyle="rgba(0,0,0,0.05)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle="#00ff00";
+    ctx.font=fontSize+"px monospace";
+
+    for(let i=0;i<drops.length;i++){
+
+        const text=
+        letters[Math.floor(
+        Math.random()*letters.length)];
+
+        ctx.fillText(
+            text,
+            i*fontSize,
+            drops[i]*fontSize
+        );
+
+        if(
+            drops[i]*fontSize >
+            canvas.height &&
+            Math.random() > 0.975
+        ){
+            drops[i]=0;
+        }
+
+        drops[i]++;
+    }
+}
+
+setInterval(drawMatrix,33);
+
+function beep(){
+
+    const audio =
+    new(window.AudioContext ||
+    window.webkitAudioContext)();
+
+    const osc =
+    audio.createOscillator();
+
+    osc.type="square";
+    osc.frequency.value=900;
+
+    osc.connect(audio.destination);
+
+    osc.start();
+
+    setTimeout(()=>{
+        osc.stop();
+    },150);
+}
+
+function checkCode(){
+
+    const name =
+    document.getElementById("code")
+    .value
+    .trim()
+    .toLowerCase();
 
     const valid = [
         "zuriel",
@@ -26,38 +153,130 @@ function checkCode() {
         "jeric",
         "arnel",
         "klinton",
-        "nysun"  
+        "nysun"
     ];
 
-    if (!valid.includes(name)) {
-        document.getElementById("result").innerHTML = "❌ ay nagan moha ot";
+    if(!valid.includes(name)){
+        document.getElementById("result")
+        .innerHTML =
+        "❌ ay nagan moha ot";
         return;
     }
 
-    document.body.innerHTML = `
-    <div style="background:black;color:#00ff00;height:100vh;padding:20px;font-family:monospace">
-        <h1>INITIALIZING BREACH...</h1>
+    document.body.innerHTML=`
+    <div style="
+    background:black;
+    color:#00ff00;
+    height:100vh;
+    padding:20px;
+    font-family:monospace;
+    text-align:left;
+    ">
+    <h2>INITIALIZING BREACH...</h2>
+    <div id="log"></div>
     </div>
     `;
 
-    setTimeout(() => {
-        document.body.innerHTML = `
-        <div style="background:black;color:#00ff00;height:100vh;padding:20px;font-family:monospace">
-            <h1>ACCESS GRANTED</h1>
-        </div>
-        `;
-    }, 2000);
+    const log =
+    document.getElementById("log");
 
-    setTimeout(() => {
-        document.body.innerHTML = `
-        <div style="background:#111;color:white;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
-            <h1>hahahahha Try ko lng</p>
-            <p>Created by Earl</p>
-        </div>
-        `;
-    }, 4000);
+    const lines = [
+    "[+] SCANNING TARGET",
+    "[+] BYPASSING FIREWALL",
+    "[+] ACCESSING DATABASE",
+    "[+] EXTRACTING FILES",
+    "[+] DECRYPTING PASSWORDS",
+    "[+] INJECTING PAYLOAD",
+    "[+] ROOT ACCESS OBTAINED"
+    ];
+
+    let i=0;
+
+    const interval =
+    setInterval(()=>{
+
+        beep();
+
+        if(i < lines.length){
+
+            log.innerHTML +=
+            lines[i] + "<br>";
+
+            i++;
+
+        }else{
+
+            clearInterval(interval);
+
+            beep();
+            beep();
+
+            document.body.innerHTML=`
+            <div style="
+            background:black;
+            color:#00ff00;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-family:monospace;
+            font-size:50px;
+            ">
+            ACCESS GRANTED
+            </div>
+            `;
+
+            setTimeout(()=>{
+
+                let flash=0;
+
+                const flasher=
+                setInterval(()=>{
+
+                    document.body.style.background=
+                    flash%2?"white":"black";
+
+                    flash++;
+
+                    if(flash>20){
+
+                        clearInterval(flasher);
+
+                        document.body.innerHTML=`
+                        <div style="
+                        background:#111;
+                        color:white;
+                        height:100vh;
+                        display:flex;
+                        flex-direction:column;
+                        justify-content:center;
+                        align-items:center;
+                        text-align:center;
+                        font-family:Arial;
+                        ">
+                        <h1 style="font-size:70px">
+                        😂 LOKDIT MO
+                        </h1>
+
+                        <p style="font-size:30px">
+                        hahahahha Try ko lng
+                        </p>
+
+                        <p>
+                        Created by Commander
+                        </p>
+                        </div>
+                        `;
+                    }
+
+                },120);
+
+            },2000);
+        }
+
+    },700);
 }
 </script>
 
 </body>
-</html> 
+</html>
